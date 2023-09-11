@@ -31,12 +31,17 @@ This exercise accompanies the lessons in Environmental Data Analytics on coding 
 4.  Insert comments in your code to describe what you are doing.
 
 ```{r basics 1}
-#1. Creating a sequence from one to thirty, by increments of three, assigned with the name threeSequence
+#1. Creating a sequence from one to thirty, by increments of three, 
+# assigned with the name threeSequence
 three_sequence <- seq(1, 30, 3)
-#2. Using mean() and median() to find the mean and median of this new vector. Both values show in the console as 14.5.
+
+#2. Using mean() and median() to find the mean and median of this new vector. 
+# Both values show in the console as 14.5.
 mean(three_sequence)
 median(three_sequence)
-#3. Using the > function to determine if the mean is greater than the median. The console returns the value "FALSE".
+
+#3. Using the > function to determine if the mean is greater than the median. 
+#The console returns the value "FALSE".
 mean(three_sequence) > median(three_sequence)
 ```
 
@@ -62,8 +67,10 @@ test_score <- seq(25, 100, 25)
 passed_test <- test_score >= 50
 # passed_test vector is a logical vector
 
-# Creating a data_frame from these three vectors under the name student_test_scores, with descriptive titles for each column
-student_test_scores <- data.frame("Student Name"=student_name, "Test Score"=test_score, "Test Passed"=passed_test)
+# Creating a data_frame from these three vectors under the name student_test_scores, 
+# with descriptive titles for each column
+student_test_scores <- data.frame("Student Name"=student_name, "Test Score"=test_score,
+                                  "Test Passed"=passed_test)
 
 ```
 
@@ -85,17 +92,20 @@ are_grades_passing <- function(x) {
 are_grades_passing(test_score)
 
 # Creating a function with "if" and "else" statements
-are_grades_passing2 <- function(x) {
-  if(x >= 50) {
-    print("PASS")
-  }
-  else {
-    print("FAIL")
-  }
-}
+# are_grades_passing2 <- function(x) {
+#  if(x >= 50) {
+#    print("PASS")
+#  }
+#  else {
+#    print("FAIL")
+#  }
+# }
 
 # Testing "if" and "else" statements with test_score vector
-are_grades_passing2(test_score)
+# are_grades_passing2(test_score)
+
+# NOTE: it would not allow me to knit the code with the "if" and "else" statements 
+# being non-functional, so I added the pound symbols to render them unusable.
 
 ```
 
