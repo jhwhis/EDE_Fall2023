@@ -101,4 +101,4 @@ are_grades_passing2(test_score)
 
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
 
-> Answer: The "if" and "else" function did not work, as it says that the condition has a length > 1. The ifelse function did work, however.
+> Answer: The "if" and "else" function did not work, as it says that the condition has a length > 1. The "ifelse" function did work, however. This is because I inserted a vector, instead of a singular value, as the "x" value, which the "if" statement seems to have conflict with. The "ifelse" function does not seem to have this issue.
