@@ -1,6 +1,6 @@
 ---
 title: "Assignment 2: Coding Basics"
-author: "Student Name"
+author: "Jake Whisler"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -31,10 +31,11 @@ This exercise accompanies the lessons in Environmental Data Analytics on coding 
 4.  Insert comments in your code to describe what you are doing.
 
 ```{r basics 1}
-#1. 
-
-#2. 
-
+#1. Creating a sequence from zero to thirty, by increments of three, assigned with the name threeSequence
+threeSequence <- seq(0, 30, 3)
+#2. Using mean() and median() to find the mean and median of this new vector. Both values are returned in the console as 15.
+mean(threeSequence)
+median(threeSequence)
 #3. 
 
 ```
