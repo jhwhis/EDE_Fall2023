@@ -32,12 +32,12 @@ This exercise accompanies the lessons in Environmental Data Analytics on coding 
 
 ```{r basics 1}
 #1. Creating a sequence from one to thirty, by increments of three, assigned with the name threeSequence
-threeSequence <- seq(1, 30, 3)
+three_sequence <- seq(1, 30, 3)
 #2. Using mean() and median() to find the mean and median of this new vector. Both values show in the console as 14.5.
-mean(threeSequence)
-median(threeSequence)
+mean(three_sequence)
+median(three_sequence)
 #3. Using the > function to determine if the mean is greater than the median. The console returns the value "FALSE".
-mean(threeSequence) > median(threeSequence)
+mean(three_sequence) > median(three_sequence)
 ```
 
 ## Basics, Part 2
