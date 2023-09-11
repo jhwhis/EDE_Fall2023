@@ -51,8 +51,10 @@ mean(three_sequence) > median(three_sequence)
 8.  Label the columns of your data frame with informative titles.
 
 ```{r basics 2}
-#5.
-
+#5. Creating three vectors: student_name, test_score, passed_test
+student_name
+test_score <- seq(25, 100, 25)
+passed_test <- test_score >= 50
 #6.
 
 #7.
