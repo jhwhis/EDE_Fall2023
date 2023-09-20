@@ -34,6 +34,13 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Ex
 
 ```{r,  message = FALSE}
 
+# Loading the tidyverse and lubridate packages
+library(tidyverse)
+library(lubridate)
+
+# Reading in two comma-separated value files for data and naming them as variables in our environment
+Neonics <- read.csv("./Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv", stringsAsFactors = TRUE)
+Litter <- read.csv("./Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv", stringsAsFactors = TRUE)
 ```
 
 ## Learn about your system
