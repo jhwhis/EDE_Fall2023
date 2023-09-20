@@ -86,7 +86,8 @@ sort(summary(Neonics$Effect))
 7.  Using the `summary` function, determine the six most commonly studied species in the dataset (common name). What do these species have in common, and why might they be of interest over other insects? Feel free to do a brief internet search for more information if needed.[TIP: The `sort()` command can sort the output of the summary command...]
 
 ```{r neonics-species-summary}
-# Using the summary function on the specific Species.Common.Name column of the dataframe, sorted by prevalence
+# Using the summary function on the specific Species.Common.Name column of the dataframe, 
+# sorted by prevalence
 tail(sort(summary(Neonics$Species.Common.Name)))
 ```
 
