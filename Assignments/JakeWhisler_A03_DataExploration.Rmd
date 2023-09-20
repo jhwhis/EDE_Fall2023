@@ -75,7 +75,8 @@ print(nrow(Neonics))
 6.  Using the `summary` function on the "Effect" column, determine the most common effects that are studied. Why might these effects specifically be of interest?
 
 ```{r neonics-effect-summary}
-# Using the summary function on the specific Effect column of the dataframe, sorted by prevalence
+# Using the summary function on the specific Effect column of the dataframe, 
+# sorted by prevalence
 sort(summary(Neonics$Effect))
 ```
 
