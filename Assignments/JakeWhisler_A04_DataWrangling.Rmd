@@ -133,6 +133,9 @@ EPA_air_common_sites <- mutate(EPA_air_common_sites, month = month(Date))
 EPA_air_processed <- mutate(EPA_air_common_sites, year = year(Date))
 
 #9
+EPA_air_processed_2 <-
+  EPA_air_processed %>%
+  group_by(Date,Site.Name,COUNTY)
 
 #10
 
