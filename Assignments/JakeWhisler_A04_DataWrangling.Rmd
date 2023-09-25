@@ -31,13 +31,25 @@ The completed exercise is due on Thursday, Sept 28th @ 5:00pm.
 2. Apply the `glimpse()` function to reveal the dimensions, column names, and structure of each dataset. 
 
 ```{r setup, message = FALSE}
-#1a 
+#1a Loading the tidyverse, lubridate, and here packages
+library(tidyverse)
+library(lubridate)
+library(here)
 
-#1b 
+#1b Checking working directory, it shows that it's the EDE_Fall2023/Assignments folder
+getwd()
 
-#1c 
+#1c  Reading in the raw data files associated with EPA Air
+pm25_nc2019 <- read.csv("EPAair_PM25_NC2019_raw.csv", stringsAsFactors = TRUE)
+pm25_nc2018 <- read.csv("EPAair_PM25_NC2018_raw.csv", stringsAsFactors = TRUE)
+o3_nc2019 <- read.csv("EPAair_O3_NC2019_raw.csv", stringsAsFactors = TRUE)
+o3_nc2018 <- read.csv("EPAair_O3_NC2018_raw.csv", stringsAsFactors = TRUE)
 
-#2 
+#2 Using glimpse() to reveal the dimensions of each data set
+glimpse(pm25_nc2019)
+glimpse(pm25_nc2018)
+glimpse(o3_nc2019)
+glimpse(o3_nc2018)
 
 ```
 
@@ -52,15 +64,28 @@ The completed exercise is due on Thursday, Sept 28th @ 5:00pm.
 
 6. Save all four processed datasets in the Processed folder. Use the same file names as the raw files but replace "raw" with "processed".
 
-```{r}
-#3
+```{r problems-3-to-6}
+#3 Changing the "Date" columns in each dataset to be date objects using as.Date()
+pm25_nc2019$Date <- as.Date(pm25_nc2019$Date, format = "%m/%d/%Y")
+pm25_nc2018$Date <- as.Date(pm25_nc2018$Date, format = "%m/%d/%Y")
+o3_nc2019$Date <- as.Date(o3_nc2019$Date, format = "%m/%d/%Y")
+o3_nc2018$Date <- as.Date(o3_nc2018$Date, format = "%m/%d/%Y")
 
-#4
+#4 Selecting only the desired columns
+pm25_nc2019 <- pm25_nc2019[c(1,7,8,12,18,19,20)]
+pm25_nc2018 <- pm25_nc2018[c(1,7,8,12,18,19,20)]
+o3_nc2019 <- o3_nc2019[c(1,7,8,12,18,19,20)]
+o3_nc2018 <- o3_nc2018[c(1,7,8,12,18,19,20)]
 
-#5
+#5 Filling AQS_PARAMETER_DESC cells with "PM2.5"
+pm25_nc2019$AQS_PARAMETER_DESC <- "PM2.5"
+pm25_nc2018$AQS_PARAMETER_DESC <- "PM2.5"
 
-#6
-
+#6 Saving the datasets to the Processed folder
+write.csv(pm25_nc2019, row.names = FALSE, file = "./Data/Processed/EPAair_PM25_NC2019_processed.csv")
+write.csv(pm25_nc2018, row.names = FALSE, file = "./Data/Processed/EPAair_PM25_NC2018_processed.csv")
+write.csv(o3_nc2019, row.names = FALSE, file = "./Data/Processed/EPAair_O3_NC2019_processed.csv")
+write.csv(o3_nc2018, row.names = FALSE, file = "./Data/Processed/EPAair_O3_NC2018_processed.csv")
 ```
 
 
@@ -85,9 +110,27 @@ The completed exercise is due on Thursday, Sept 28th @ 5:00pm.
 11. Save your processed dataset with the following file name: "EPAair_O3_PM25_NC1819_Processed.csv"
 
 ```{r}
-#7 
+#7 Combining the four datasets using rbind()
+EPA_air <- rbind(pm25_nc2019, pm25_nc2018, o3_nc2019, o3_nc2018)
 
-#8 
+#8 Wrangling dataset to meet conditions
+EPA_air_common_sites <- 
+  EPA_air %>% 
+  filter(Site.Name %in% c("Linville Falls","Durham Armory",
+                                                         "Leggett","Hattie Avenue",
+                                                         "Clemmons Middle","Mendenhall School",
+                                                         "Frying Pan Mountain","West Johnston Co.",
+                                                         "Garinger High School","Castle Hayne",
+                                                         "Pitt Agri. Center","Bryson City",
+                                                         "Millbrook School")) %>%
+  group_by(Date,Site.Name,AQS_PARAMETER_DESC,COUNTY) %>%
+  summarise(meanAQI = mean(DAILY_AQI_VALUE),
+            meanLat = mean(SITE_LATITUDE),
+            meanLong = mean(SITE_LONGITUDE))
+
+EPA_air_common_sites <- mutate(EPA_air_common_sites, month = month(Date))
+
+EPA_air_processed <- mutate(EPA_air_common_sites, year = year(Date))
 
 #9
 
