@@ -132,14 +132,16 @@ EPA_air_common_sites <- mutate(EPA_air_common_sites, month = month(Date))
 
 EPA_air_processed <- mutate(EPA_air_common_sites, year = year(Date))
 
-#9
+#9 Creating two separate columns for Ozone and PM2.5
 EPA_air_processed_2 <-
   EPA_air_processed %>%
-  group_by(Date,Site.Name,COUNTY)
+  pivot_wider(names_from=AQS_PARAMETER_DESC, values_from = meanAQI)
 
-#10
+#10 Finding dimensions of tidy dataset, it returns 9 columns and 8,976 rows
+glimpse(EPA_air_processed_2)
 
-#11
+#11 Writing a .csv file from our processed EPA air dataset that we cleaned
+write.csv(EPA_air_processed_2, row.names = FALSE, file = "./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
 
 ```
 
@@ -152,14 +154,19 @@ EPA_air_processed_2 <-
 
 ```{r}
 
-#12
+#12 Creating a summary of O3 and PM2.5 means by location, month, and year
+EPA_air_summary <-
+  EPA_air_processed_2 %>%
+  group_by(Site.Name,month,year) %>%
+  na.omit(Ozone) %>%
+  summarise(meanAQI_PM25 = mean(PM2.5),
+            meanAQI_O3 = mean(Ozone))
 
-
-#13
-
+#13 Grabbing the dimensions of the summary dataset, it returns 5 columns and 223 rows
+glimpse(EPA_air_summary)
 
 ```
 
 14. Why did we use the function `drop_na` rather than `na.omit`?
 
-> Answer: 
+> Answer: drop_na() allows us to drop rows with NA values from a single column, in this case "Ozone", within our pipe just by specifying the column name. From what I understand, na.omit CAN do the same thing, it just may involve more steps.
