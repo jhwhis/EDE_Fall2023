@@ -40,11 +40,11 @@ library(cowplot)
 getwd()
 
 PeterPaul <- read.csv(
-  "./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", 
+  "./Data/Processed_KEY/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", 
   stringsAsFactors = TRUE)
 
 Litter <- read.csv(
-  "./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv", stringsAsFactors = TRUE)
+  "./Data/Processed_KEY/NEON_NIWO_Litter_mass_trap_Processed.csv", stringsAsFactors = TRUE)
 
 #2 Checking date column data formats and changing if needed
 class(Litter$collectDate)
