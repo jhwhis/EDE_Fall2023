@@ -153,26 +153,12 @@ NeedleLitterbyDate <-
 print(NeedleLitterbyDate)
 
 #7 Creating three new graphs and combining them for each NLCD class
-NeedleLitterbyDate_Evergreen <- 
-  ggplot(subset(Needles, nlcdClass == "evergreenForest"), 
-         aes(x = collectDate, y = dryMass)) +
-  geom_point(color = "red") +
-  ggtitle("Needle Litter by Date, Forest")
-NeedleLitterbyDate_Grassland <- 
-  ggplot(subset(Needles, nlcdClass == "grasslandHerbaceous"), 
-         aes(x = collectDate, y = dryMass)) +
-  geom_point(color = "green") +
-  ggtitle("Needle Litter by Date, Grassland")
-NeedleLitterbyDate_Shrub <- 
-  ggplot(subset(Needles, nlcdClass == "shrubScrub"), 
-         aes(x = collectDate, y = dryMass)) +
-  geom_point(color = "blue") +
-  ggtitle("Needle Litter by Date, Shrubland")
 
-NeedleLitterbyDate_separated <-
-  plot_grid(NeedleLitterbyDate_Evergreen, NeedleLitterbyDate_Grassland, NeedleLitterbyDate_Shrub,
-          nrow = 3)
-print(NeedleLitterbyDate_separated)
+NeedleLitterbyDate_faceted <-
+  ggplot(Needles, aes(x = collectDate, y = dryMass)) +
+  facet_wrap(vars(nlcdClass),nrow=3) +
+  geom_point()
+print(NeedleLitterbyDate_faceted)
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
