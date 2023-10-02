@@ -96,6 +96,7 @@ Tip:
 
 ```{r Create boxplots}
 #5 Creating the three boxplots and combining using a cowplot
+# Month vs. Temperature
 MonthvsTemperature <- 
   ggplot(PeterPaul, aes(x = factor(month), y = temperature_C, color = factor(lakename))) +
   geom_boxplot(show.legend = FALSE) +
@@ -105,6 +106,7 @@ MonthvsTemperature <-
   scale_x_discrete(label = c("Feb","May","Jun","Jul","Aug","Sep","Oct","Nov"))
 print(MonthvsTemperature)
 
+# TP vs. Temperature
 TPvsTemperature <- 
   ggplot(PeterPaul, aes(x = factor(month), y = tp_ug, color = factor(lakename))) +
   geom_boxplot(show.legend = FALSE) +
@@ -114,6 +116,7 @@ TPvsTemperature <-
   scale_x_discrete(label = c("Feb","May","Jun","Jul","Aug","Sep","Oct","Nov"))
 print(TPvsTemperature)
 
+# TN vs. Temperature (includes the legend for later use)
 TNvsTemperature <- 
   ggplot(PeterPaul, aes(x = factor(month), y = tn_ug, color = factor(lakename))) +
   geom_boxplot() +
@@ -138,13 +141,38 @@ Question: What do you observe about the variables of interest over seasons and b
 7. [Niwot Ridge] Now, plot the same plot but with NLCD classes separated into three facets rather than separated by color. 
 
 ```{r Plot litter}
-#6
+#6 Plotting needle litter by date and separated by NLCD class
+#Creating a subset of litter data with only Needles
+Needles <- subset(Litter, functionalGroup == "Needles")
 
+#Creating the plot with all NLCD classes
+NeedleLitterbyDate <- 
+  ggplot(Needles, aes(x = collectDate, y = dryMass, color = nlcdClass)) +
+  geom_point()
+print(NeedleLitterbyDate)
 
-#7
+#7 Creating three new graphs and combining them for each NLCD class
+NeedleLitterbyDate_Evergreen <- 
+  ggplot(subset(Needles, nlcdClass == "evergreenForest"), 
+         aes(x = collectDate, y = dryMass)) +
+  geom_point(color = "red") +
+  ggtitle("Needle Litter by Date, Forest")
+NeedleLitterbyDate_Grassland <- 
+  ggplot(subset(Needles, nlcdClass == "grasslandHerbaceous"), 
+         aes(x = collectDate, y = dryMass)) +
+  geom_point(color = "green") +
+  ggtitle("Needle Litter by Date, Grassland")
+NeedleLitterbyDate_Shrub <- 
+  ggplot(subset(Needles, nlcdClass == "shrubScrub"), 
+         aes(x = collectDate, y = dryMass)) +
+  geom_point(color = "blue") +
+  ggtitle("Needle Litter by Date, Shrubland")
 
-
+NeedleLitterbyDate_separated <-
+  plot_grid(NeedleLitterbyDate_Evergreen, NeedleLitterbyDate_Grassland, NeedleLitterbyDate_Shrub,
+          nrow = 3)
+print(NeedleLitterbyDate_separated)
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer:
+> Answer: I believe that the plot with the three different facets from question 7 is more effective, as there is less overlap between the different land use classes' data points, so it can be easier to compare trends in needle litter by date for the three classes. The color-separated plot can be used to draw overall conclusions about needle litter trends, but the land use class is harder to glean anything from.
