@@ -27,6 +27,11 @@ Using markdown, create a table beneath the `Table: EPA Air Quality` line below t
 
 Table: EPA Air Quality
 
+  Item     |                                Value
+-------  |  -----------------------------------
+  Source   |         EPA Air Quality System (AQS)
+  Date     |                            2018-2019
+  Filename |  EPAair_O3_PM25_NC1819_Processed.csv
 
 ---
 
@@ -34,13 +39,13 @@ Table: EPA Air Quality
 
 Set the following R code chunk so that it runs when knit, but no messages, errors, or any output is shown. The code itself, however, should be displayed.
 
-```{r project.setup}
+```{r project.setup, error=FALSE, message=FALSE, warning=FALSE, results='hide'}
 #Import libraries
 library(tidyverse);library(lubridate);library(here);library(knitr)
 
 #Import EPA data (from the processed_KEY folder) & fix dates
 epa_data <- read.csv(
-  here("data","processed_KEY","EPAair_O3_PM25_NC1819_Processed.csv"),
+  here("Data","Processed_KEY","EPAair_O3_PM25_NC1819_Processed.csv"),
   stringsAsFactors = TRUE) %>% 
   mutate(Date = ymd(Date))
 ```
@@ -77,6 +82,12 @@ summary_Ozone <- epa_data %>%
   arrange(mean_Ozone)
 
 #Use the `kable` function to produce the 2 tables in markdown format
+
+knitr::kable(summary_PM25, caption = "Mean Particulates (2.5mm)", 
+             col.names = c("County","$\\mu g/m^3$"))
+
+knitr::kable(summary_Ozone, caption = "Mean Ozone", 
+             col.names = c("County","$\\mu g/m^3$"))
 
 ```
 
