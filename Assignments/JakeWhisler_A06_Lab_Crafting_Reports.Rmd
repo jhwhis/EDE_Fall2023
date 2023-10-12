@@ -65,8 +65,8 @@ Customize the chunk options such that the code is run but is not displayed in th
 >
 > -   If your output table spans across two pages, try inserting a page break in the markdown just before your code chunk.
 
-
-```{r data.summary}
+\newpage
+```{r data.summary, echo=FALSE, message=FALSE, warning=FALSE}
 #Compute mean PM2.5 concentration for each county, sorted by value
 summary_PM25 <- epa_data %>% 
   drop_na(PM2.5) %>% 
@@ -97,7 +97,7 @@ knitr::kable(summary_Ozone, caption = "Mean Ozone",
 ## Task 3: Plots
 
 Create two separate code chunks that create boxplots of the distribution of Ozone levels by month using, one for only records collected in 2018 and one for records in 2019. Customize the chunk options such that the final figures are displayed but not the code used to generate the figures. In addition, align the plots on the left side of the page and set the figure heights so both plots fit on the same page with minimal space remaining. Lastly, add a `fig.cap` chunk option to add a caption (title) to your plot that will display underneath the figure.
-```{r ozone-2018, echo=FALSE, warning=FALSE, fig.height=2.5}
+```{r ozone-2018, echo=FALSE, warning=FALSE, fig.height=3}
 #| fig.cap="2018 Ozone",
 #| fig.align = "left"
 ozone2018 <- ggplot(subset(epa_data, Year == "2018"), aes(x = factor(Month), y = Ozone, group = Month)) +
@@ -115,7 +115,7 @@ ozone2018 <- ggplot(subset(epa_data, Year == "2018"), aes(x = factor(Month), y =
   ylab("Ozone (ug/m^3)")
 print(ozone2018)
 ```
-```{r ozone-2019, echo=FALSE, fig.height=2.5, warning=FALSE}
+```{r ozone-2019, echo=FALSE, fig.height=3, warning=FALSE}
 #| fig.cap="2019 Ozone",
 #| fig.align = "left"
 ozone2019 <- ggplot(subset(epa_data, Year == "2019"), aes(x = factor(Month), y = Ozone, group = Month)) +
