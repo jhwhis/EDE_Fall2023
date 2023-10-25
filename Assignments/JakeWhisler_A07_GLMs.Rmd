@@ -26,11 +26,23 @@ This exercise accompanies the lessons in Environmental Data Analytics on general
 2. Build a ggplot theme and set it as your default theme.
 
 ```{r setup2}
-#1
+#1 Checking working directory, loading necessary packages, and importing data
+getwd()
+library(lubridate)
+library(tidyverse)
+library(agricolae)
+library(here)
+library(dplyr)
 
+NTL <- read.csv("~/EDE_Fall2023/Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv")
+NTL$sampledate <- as.Date(NTL$sampledate, format = "%m/%d/%Y")
+class(NTL$sampledate)
 
 #2
-
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+theme_set(mytheme)
 
 ```
 
@@ -39,8 +51,8 @@ Our first research question is: Does mean lake temperature recorded during July 
 
 3. State the null and alternative hypotheses for this question:
 > Answer:
-H0: 
-Ha: 
+H0: Mean lake temperature in July does not change with depth according to our data.
+Ha: Mean lake temperature in July does change with depth according to our data.
 
 
 4.  Wrangle your NTL-LTER dataset with a pipe function so that the records meet the following criteria: 
@@ -51,32 +63,47 @@ Ha:
 5. Visualize the relationship among the two continuous variables with a scatter plot of temperature by depth. Add a smoothed line showing the linear model, and limit temperature values from 0 to 35 °C. Make this plot look pretty and easy to read.
 
 ```{r scatterplot}
-#4
+#4 Wrangling the dataset
+NTL <- mutate(NTL, month = month(sampledate))
+NTL_wrangled <-
+  NTL %>%
+  filter(month == "7") %>%
+  select("lakename", "year4", "daynum", "depth", "temperature_C") %>%
+  na.omit("temperature_C")
 
-
-#5
-
+#5 Visualizing temperature by depth with linear model
+NTL_depth_vs_temp <-
+  ggplot(data = NTL_wrangled, aes(x = depth, y = temperature_C)) +
+  ylim(0,35) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  xlab("Depth, in Meters") +
+  ylab("Temperature, in Celsius") +
+  ggtitle("Temperature as a function of Depth (July)")
+print(NTL_depth_vs_temp)
 
 ```
 
 
 6. Interpret the figure. What does it suggest with regards to the response of temperature to depth? Do the distribution of points suggest about anything about the linearity of this trend?
 
-> Answer: 
+> Answer: Generally speaking, it seems temperature decreases with depth, eventually reaching leveling out around 5 degrees Celsius at the deepest depths recorded. However, there is a considerable amount of variability in temperature for samples taken at the same depth, so the relationship is not entirely linear.
 
 
 7. Perform a linear regression to test the relationship and display the results
 
 ```{r linear.regression}
-#7
-
+#7 Creating a linear regression of temperature as a function of depth
+NTL_depth_vs_temp_regression <-
+  lm(data = NTL_wrangled, temperature_C ~ depth)
+summary(NTL_depth_vs_temp_regression)
 
 ```
 
 
 8. Interpret your model results in words. Include how much of the variability in temperature is explained by changes in depth, the degrees of freedom on which this finding is based, and the statistical significance of the result. Also mention how much temperature is predicted to change for every 1m change in depth. 
 
-> Answer:
+> Answer: First of all, the intercept is estimated to be 21.956 degrees Celsius, meaning that at zero meters of depth (i.e. the surface of the lake), the water temperature is predicted to be 21.956 degrees Celsius. Approximately 73.87% of the variability in temperature is explained by changes in depth. This finding is based on 9727 degrees of freedom. The p-value returned by this linear model is less than 2.2e-16, meaning that it is statistically significant and we can assume our alternative hypothesis to be true. For each additional 1m change in depth, there is an estimated decrease of 1.946 degrees Celsius in temperature.
 
 
 ---
@@ -90,18 +117,20 @@ Let's tackle a similar question from a different approach. Here, we want to expl
 10. Run a multiple regression on the recommended set of variables. 
 
 ```{r temperature.model}
-#9
+#9 Choosing variables based on AIC Stepwise algorithm
+TPAIC <- lm(data = NTL_wrangled, temperature_C ~ depth + daynum + year4)
+step(TPAIC)
 
-
-
-#10
-
+#10 Running the multiple regression
+NTL_day_year_vs_temp <-
+  lm(data = NTL_wrangled, temperature_C ~ daynum + year4)
+summary (NTL_day_year_vs_temp)
 
 ```
 
 11. What is the final set of explanatory variables that the AIC method suggests we use to predict temperature in our multiple regression? How much of the observed variance does this model explain? Is this an improvement over the model using only depth as the explanatory variable?
 
-> Answer: 
+> Answer: The AIC method gave us lower AIC values for "daynum" and "year4", meaning that we should use those variables to predict temperature in our multiple regression. However, this model explains approximately 0.2% of the variability in temperature. That being said, this is not an improvement upon our original model using depth as the explanatory variable.
 
 
 
@@ -111,7 +140,7 @@ Let's tackle a similar question from a different approach. Here, we want to expl
 12. Now we want to see whether the different lakes have, on average, different temperatures in the month of July. Run an ANOVA test to complete this analysis. (No need to test assumptions of normality or similar variances.) Create two sets of models: one expressed as an ANOVA models and another expressed as a linear model (as done in our lessons).
 
 ```{r anova.model}
-#12
+#12 Creating the ANOVA and linear models
 
 
 ```
