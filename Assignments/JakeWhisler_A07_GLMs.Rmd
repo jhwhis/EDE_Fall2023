@@ -141,48 +141,66 @@ summary (NTL_day_year_vs_temp)
 
 ```{r anova.model}
 #12 Creating the ANOVA and linear models
+NTL.anova <- aov(data = NTL_wrangled, temperature_C ~ lakename)
+summary(NTL.anova)
 
-
+NTL.lm <-
+  lm(data = NTL_wrangled, temperature_C ~ lakename)
+summary(NTL.lm)
 ```
 
 13. Is there a significant difference in mean temperature among the lakes? Report your findings. 
 
-> Answer: 
+> Answer: The p-value for both the ANOVA and the linear model indicate that there is a significant difference in mean temperature among the lakes, since it is well below the average benchmark for statistical significance (0.05).
 
 
 
 14. Create a graph that depicts temperature by depth, with a separate color for each lake. Add a geom_smooth (method = "lm", se = FALSE) for each lake. Make your points 50 % transparent. Adjust your y axis limits to go from 0 to 35 degrees. Clean up your graph to make it pretty. 
 
 ```{r scatterplot.2}
-#14.
-
+#14. Creating graph of temperature by depth with colors separating lakes
+NTL_temp_by_lake_graph <-
+  ggplot(data = NTL_wrangled, aes(x = depth, y = temperature_C, color = factor(lakename))) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  ylim(0,35) +
+  xlab("Depth, in meters") +
+  ylab("Temperature, in Celsius") +
+  ggtitle("Temperature as a function of depth, by lake")
+print(NTL_temp_by_lake_graph)
 
 ```
 
 15. Use the Tukey's HSD test to determine which lakes have different means.
 
 ```{r tukey.test}
-#15
-
+#15 Performing the Tukey HSD test
+NTLgroups <- HSD.test(NTL.anova, "lakename", group = TRUE)
+print(NTLgroups)
 
 ```
 
 16.From the findings above, which lakes have the same mean temperature, statistically speaking, as Peter Lake? Does any lake have a mean temperature that is statistically distinct from all the other lakes?
 
->Answer:
+>Answer: There are two groups of two lakes that have statistically the same mean as one another: Peter Lake and Paul Lake have a statistically similar mean temperature, and Tuesday Lake and Hummingbird Lake share a statistically similar mean as well. All the rest of the lakes have statistically distinct mean temperatures from one another.
 
  
 
 17. If we were just looking at Peter Lake and Paul Lake. What's another test we might explore to see whether they have distinct mean temperatures? 
 
->Answer: 
+>Answer: We would run a two-sample t-test to see if their mean temperatures in July match.
 
 
 
 18. Wrangle the July data to include only records for Crampton Lake and Ward Lake. Run the two-sample T-test on these data to determine whether their July temperature are same or different. What does the test say? Are the mean temperatures for the lakes equal? Does that match you answer for part 16?
 
 ```{r t.test}
+NTL_wrangled_CrWa <-
+  NTL_wrangled %>%
+  filter(lakename %in% c("Crampton Lake","Ward Lake"))
 
+NTL.twosample <- t.test(NTL_wrangled_CrWa$temperature_C ~ NTL_wrangled_CrWa$lakename)
+NTL.twosample
 ```
 
->Answer: 
+>Answer: The mean temperatures for Crampton Lake and Ward Lake are not equal, as the t-test returned a significance value of 0.26, which is much higher than the normal 0.05 for statistical significance, meaning that there is insufficient evidence to say that they are the same. This indicates that they are not the same, which matches the results from the Tukey HSD groupings.
