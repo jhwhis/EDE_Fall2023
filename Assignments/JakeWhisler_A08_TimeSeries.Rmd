@@ -1,6 +1,6 @@
 ---
 title: "Assignment 8: Time Series Analysis"
-author: "Student Name"
+author: "Jake Whisler"
 date: "Fall 2023"
 output: pdf_document
 geometry: margin=2.54cm
@@ -26,8 +26,12 @@ This exercise accompanies the lessons in Environmental Data Analytics on general
 * Load the tidyverse, lubridate, zoo, and trend packages
 * Set your ggplot theme
 
-```{r}
-
+```{r session-setup, message=FALSE, warning=FALSE}
+getwd()
+library(tidyverse)
+library(lubridate)
+library(zoo)
+library(trend)
 ```
 
 
