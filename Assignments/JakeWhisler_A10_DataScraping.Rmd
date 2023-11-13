@@ -1,6 +1,6 @@
 ---
 title: "Assignment 10: Data Scraping"
-author: "Student Name"
+author: "Jake Whisler"
 output: pdf_document
 ---
 
@@ -112,7 +112,8 @@ print(Durham_lineplot)
 ```{r construct.a.scraping.function}
 #6. Constructing my function
 scrape.data <- function(the_PWSID, the_year){
-  the_website <- read_html(paste0('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=',the_PWSID,'&year=',the_year))
+  the_website <- read_html(paste0('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=',the_PWSID,
+                                  '&year=',the_year))
   the_systemname_tag <- 'div+ table tr:nth-child(1) td:nth-child(2)'
   the_ownership_tag <- 'div+ table tr:nth-child(2) td:nth-child(4)'
   the_PWSID_tag <- 'td tr:nth-child(1) td:nth-child(5)'
@@ -143,14 +144,30 @@ scrape.data <- function(the_PWSID, the_year){
 ```{r fetch.and.plot.Durham.2015.data}
 #7 Using my function to gather Durham 2015 data and plot it
 Durham2015 <- scrape.data("03-32-010","2015")
+
+Durham2015_lineplot <-ggplot(Durham2015, aes(x=Date, y=DailyMaxUse_MGD)) +
+  geom_line() +
+  labs(title = "2015 Max Daily Water Usage for Durham",
+       x = "Month",
+       y = "Maximum Daily Water Use (MGD)")
+print(Durham2015_lineplot)
 ```
 
 8. Use the function above to extract data for Asheville (PWSID = 01-11-010) in 2015. Combine this data with the Durham data collected above and create a plot that compares Asheville's to Durham's water withdrawals.
 
 ```{r fetch.and.plot.Asheville.2015.data}
-#8 
+#8 Asheville data scraping and merging
+Asheville2015 <- scrape.data("01-11-010","2015")
 
+AshevilleDurham <- rbind(Durham2015, Asheville2015)
 
+AshevilleDurham_lineplot <-ggplot(AshevilleDurham, aes(x=Date, y=DailyMaxUse_MGD,
+                                                       colour=SystemName)) +
+  geom_line() +
+  labs(title = "2015 Max Daily Water Usage for Durham and Asheville",
+       x = "Month",
+       y = "Maximum Daily Water Use (MGD)")
+print(AshevilleDurham_lineplot)
 ```
 
 
@@ -159,11 +176,19 @@ Durham2015 <- scrape.data("03-32-010","2015")
 > TIP: See Section 3.2 in the "10_Data_Scraping.Rmd" where we apply "map2()" to iteratively run a function over two inputs. Pipe the output of the map2() function to `bindrows()` to combine the dataframes into a single one. 
 
 ```{r fetch.and.plot.Asheville.multiyear.data }
-#9 
+#9 Repeating the function for 2010 through 2021
+the_ID <- rep("01-11-010", 12)
+the_years = c(2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021)
 
+Asheville_dfs <- map2(the_ID, the_years, scrape.data) %>%
+  bind_rows()
 
+AshevilleYears <- ggplot(Asheville_dfs, aes(x=Date, y=DailyMaxUse_MGD))+
+  geom_smooth(method = "loess")
+
+print(AshevilleYears)
 ```
 
 Question: Just by looking at the plot (i.e. not running statistics), does Asheville have a trend in water usage over time?
 > Answer:
->
+> Yes, Asheville has increased steadily in water usage from 2014 to 2021, according to the plot above.
